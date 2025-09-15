@@ -22,6 +22,7 @@ class SignUpController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             "phone" => ["required"],
+            "type" => ["required","in:user,provider"],
             "password" => ["required", "min:8"],
             "confirm_password" => ["required", "same:password"],
         ]);

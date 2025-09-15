@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('profile_picture')->nullable();
             $table->enum('status', ['active', 'blocked'])->default('active');
+            $table->enum('type', ['user', 'provider'])->default('user');
             $table->json('location')->nullable();
             $table->string('zip_code')->nullable();
             $table->string('fcm_token')->nullable();

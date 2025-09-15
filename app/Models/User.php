@@ -25,6 +25,7 @@ class User extends Authenticatable
         'password',
         'profile_picture',
         'status',
+        'type',
         'location',
         'zip_code',
         'fcm_token',
