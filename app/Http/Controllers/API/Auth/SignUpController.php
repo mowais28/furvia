@@ -17,20 +17,26 @@ class SignUpController extends Controller
 
     public function signUp(Request $request)
     {
-
-        $validatedData = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            "phone" => ["required"],
-            "type" => ["required","in:user,provider"],
-            "password" => ["required", "min:8"],
-            "confirm_password" => ["required", "same:password"],
-        ]);
+        $validatedData = Validator::make(
+            $request->all(),
+            [
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+                'phone' => ['required'],
+                'type' => ['required', 'in:user,provider'],
+                'password' => ['required', 'min:8'],
+                'confirm_password' => ['required', 'same:password'],
+                'location' => ['required_if:type,provider', 'string'],
+            ],
+            [
+                'location.required_if' => 'Location is required when signing up as a provider.',
+            ]
+        );
 
         if ($validatedData->fails()) {
             return response()->json([
-                "status" => "error",
-                "message" => $validatedData->errors()->first(),
+                'status' => 'error',
+                'message' => $validatedData->errors()->first(),
             ], 400);
         }
 
@@ -40,15 +46,15 @@ class SignUpController extends Controller
         $user = null;
         DB::transaction(function () use ($data, &$user) {
             $user = User::create($data);
-
             $this->generateAndSendOtp($user);
         });
 
         return response()->json([
-            "status" => "success",
-            "message" => "Account created successfully",
+            'status' => 'success',
+            'message' => 'Account created successfully',
         ], 200);
     }
+
 
     public function changeEmail(Request $request)
     {
@@ -126,31 +132,5 @@ class SignUpController extends Controller
             'message' => 'Email verified successfully.',
             'data' => $user,
         ]);
-    }
-
-    public function add_location(Request $request)
-    {
-        $validated = Validator::make($request->all(), [
-            "location" => ["required"],
-            "zip_code" => ["sometimes"],
-        ]);
-
-        if ($validated->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $validated->errors()->first(),
-            ], 422);
-        }
-
-        $user = $request->user();
-        $user->location = $request->location;
-        $user->zip_code = $request->zip_code;
-        $user->save();
-
-        return response()->json([
-            "status" => "success",
-            "message" => "Location updated successfully",
-            "data" => $user
-        ], 200);
     }
 }

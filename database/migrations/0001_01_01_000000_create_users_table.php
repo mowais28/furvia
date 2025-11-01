@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('title')->nullable();
             $table->string('email')->unique();
             $table->string('password');
             $table->string('profile_picture')->nullable();
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->enum('type', ['user', 'provider'])->default('user');
             $table->json('location')->nullable();
             $table->string('zip_code')->nullable();
+            $table->string('description')->nullable();
             $table->string('fcm_token')->nullable();
             $table->string('device_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();
