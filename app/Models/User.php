@@ -64,4 +64,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserPet::class);
     }
+
+    public function services()
+    {
+        return $this->belongsToMany(ListService::class, 'user_services', 'user_id', 'list_service_id');
+    }
 }

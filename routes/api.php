@@ -9,8 +9,11 @@ use App\Http\Controllers\API\ExperienceController;
 use App\Http\Controllers\API\LicenseController;
 use App\Http\Controllers\API\ListController;
 use App\Http\Controllers\API\ProfileController;
+use App\Http\Controllers\API\ServiceController;
 use App\Http\Controllers\API\SkillController;
+use App\Http\Controllers\API\UserAvailabilityController;
 use App\Http\Controllers\API\UserPetController;
+use App\Http\Controllers\API\UserServiceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -68,9 +71,24 @@ Route::middleware("auth:api")->group(function () {
     Route::get('/skills', [SkillController::class, 'index']);
     Route::post('/skills/save', [SkillController::class, 'save']);
     Route::post('/skills/{id}', [SkillController::class, 'destroy']);
-    
+
     // **************** experiences ****************
     Route::get('/experiences', [ExperienceController::class, 'index']);
     Route::post('/experiences/save', [ExperienceController::class, 'save']);
     Route::delete('/experiences/{id}', [ExperienceController::class, 'destroy']);
+
+
+    // **************** Services ****************
+    Route::get('/services', [ServiceController::class, 'index']);
+    Route::post('/services/store', [ServiceController::class, 'save']);
+    Route::post('/services/{id}', [ServiceController::class, 'destroy']);
+
+    // **************** Get User By Service ****************
+    Route::get('services/{service_id}/users', [UserServiceController::class, 'getUsersByService']);
+
+
+    // **************** User Availability ****************
+    Route::get('/availability', [UserAvailabilityController::class, 'index']);
+    Route::post('/availability/store', [UserAvailabilityController::class, 'save']);
+    Route::delete('/availability/{id}', [UserAvailabilityController::class, 'destroy']);
 });
